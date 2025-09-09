@@ -3,7 +3,7 @@
 ### Datos del Alumno
 | **Apellidos**       | **Nombres**          | **Número de Alumno** |
 |---------------------|----------------------|----------------------|
-| Apellido1 Apellido2 | Nombre 1 Nombre 2    |12345678              |
+| Palomera Coccio     | Matias Felipe        |24664235              |
 
 ### 1. Modelo Entidad-Relación (E/R)
 <!-- Inserta aquí tu diagrama ER. Usa el formato svg para evitar la perdida de calidad. Reemplaza "diagrama.svg" por la ruta a tu archivo -->
@@ -12,15 +12,30 @@
 
 ### 2. Entidades Débiles
 <!-- Justifica CADA entidad débil identificada  -->
-#### 2.1 Entidad_X
-Se identifico **Entidad_X** como entidad débil porque ...
+#### 2.1 Receta
+Se identifico **Receta** como entidad débil porque se nesecita que primero exista una consulta que genere una receta para el paciente.
+#### 2.2 Ordenes
+Se identifico **Ordenes** como entidad débil porque, al igual que una receta, se necesita que se lleve a cabo una consulta  primero.
 
 ### 3. Llaves Primarias  y Compuestas
 <!-- Justifica TODAS las llaves: primaria simple y primaria compuesta -->
-#### 3.1 Entidad_A
-La llave primaria de __Entidad A__ es  __atributo 2__ porque ...
-#### 3.2 Entidad_B
-La llave compuesta de  __Entidad_B__ es (__atributo_1__, __atributo_2__) porque ...
+#### 3.1 Persona
+La llave primaria de __Persona__ es  __Rut__ porque existe un rut unico por cada persona.
+#### 3.2 Instituciones previsionales de salud
+La llave primaria de __Instituciones previsionales de salud__ es  __Codigo__ porque tienen un codigo ministeriasl unico. Tambien considere el Rut, pero en __Personas__ se usa el codigo para enlazar entidades, asi que creo que es mas completo.
+#### 3.3 Maestro farmacia
+La llave primaria de __Maestro farmacia__ es  __Codigo generico__ porque es el codigo unico que se puede rescatar de la entidad. 
+#### 3.4 Arancel FONASA
+La llave primaria de __Arancel FONASA__ es  __Codigo__ porque es el codigo FONASA unico en la entidad.
+#### 3.5 Receta
+La llave compuesta de __Receta__ es (____, ____) porque depende de consulta con numero unico por consulta.
+#### 3.6 Ordenes
+La llave compuesta de __Ordenes__ es (____, ____) porque al igual que __Receta__ depende de consulta con numero unico por consulta.
+#### 3.7 Plan Isapre
+La llave compuesta de __Plan Isapre__ es (____, ____) porque depende de ISAPRE con grupo de arancel
+#### 3.8 Afiliacion
+La llave compuesta de __Afiliacion__ es (____, ____) porque depende de __Persona__ con las __Instituciones previcionales de salud__.
+
 
 ### 4. Relaciones
 <!-- Justifica TODAS las relaciones de tu modelo -->
