@@ -1,0 +1,5 @@
+"Pedro"	"López"	6
+"Pedro"	"González"	5
+"Francisco"	"López"	5
+"Juan"	"Silva"	5
+"Miguel"	"Fuentes"	5
