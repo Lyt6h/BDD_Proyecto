@@ -1,0 +1,6 @@
+"IDArancel"	"descripcion"	"cantidad_solicitudes"
+495	"Coproparasitológico seriado simple (incluye diagnóstico de gusanos macroscópicos y examen microscópico por concentración de tres muestras separadas método Telemann ) (proc aut)"	15
+621	"Cálculo urinario (examen físico y químico)"	13
+503	"Coproparasitológico seriado simple (incluye diagnóstico de gusanos macroscópicos y examen microscópico por concentración de tres muestras separadas método PAFS) (proc aut)  "	12
+497	"Diagnóstico parasitario en exudados  secreciones y otros líquidos orgánicos  examen macro y microscópico de (incluye concentración y/o tinción cuando proceda)  c/u"	11
+493	"Coproparasitario seriado para fasciola hepática (incluye diagnóstico de gusanos macroscópicos y examen microscópico de 10 muestras por método de Telemann y simultáneamente por técnica de Sedimentación rápida (Copa Cónica)"	11

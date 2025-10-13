@@ -1,3 +1,4 @@
+"Nombres"	"Apellidos"	"Cantidad_Diagnosticos"
 "Pedro"	"López"	6
 "Pedro"	"González"	5
 "Francisco"	"López"	5
