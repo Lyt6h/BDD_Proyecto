@@ -1,1 +1,0 @@
-"Receta Médica electrónica"	"Paciente: Isabel Flores López"	"RUN 738274-K"	"Diagnóstico: Asma"	"GLUCAGON 1 MG LIOF SOL INYECT FAM"	" 1 cápsula en ayunas cada mañana por 4 semanas."	"Fecha: 2025-03-01"	"binary data"	"Dr/a: Daniel Antonio Díaz Rodríguez"	"RUN 737881-5"

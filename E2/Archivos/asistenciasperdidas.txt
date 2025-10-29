@@ -1,43 +1,44 @@
-"fecha_por_mes"	"Total_inasistencias"
-"2024-01-01 00:00:00-03"	58
-"2024-02-01 00:00:00-03"	54
-"2024-03-01 00:00:00-03"	42
-"2024-04-01 00:00:00-03"	52
-"2024-05-01 00:00:00-04"	51
-"2024-06-01 00:00:00-04"	41
-"2024-07-01 00:00:00-04"	54
-"2024-08-01 00:00:00-04"	54
-"2024-09-01 00:00:00-04"	59
-"2024-10-01 00:00:00-03"	63
-"2024-11-01 00:00:00-03"	42
-"2024-12-01 00:00:00-03"	51
-"2025-01-01 00:00:00-03"	51
-"2025-02-01 00:00:00-03"	53
-"2025-03-01 00:00:00-03"	55
-"2025-04-01 00:00:00-03"	36
-"2025-05-01 00:00:00-04"	56
-"2025-06-01 00:00:00-04"	49
-"2025-07-01 00:00:00-04"	52
-"2025-08-01 00:00:00-04"	39
+"año"	"mes"	"Total_inasistencias"
+2024	1	58
+2024	2	54
+2024	3	42
+2024	4	52
+2024	5	51
+2024	6	41
+2024	7	54
+2024	8	54
+2024	9	59
+2024	10	63
+2024	11	42
+2024	12	51
+2025	1	51
+2025	2	53
+2025	3	55
+2025	4	36
+2025	5	56
+2025	6	49
+2025	7	52
+2025	8	39
 
 
 
 
-"IDMedico"	"Nombres"	"Total_inasistencias"
-418	"Isabel"	16
-982	"Isabel Luis"	14
-1200	"Lucía"	14
-2881	"Juan José"	14
-1878	"Ana"	14
+"IDMedico"	"Nombre"	"Total_inasistencias"
+418	"Isabel González"	16
+2881	"Juan José Fuentes"	14
+982	"Isabel Luis Contreras"	14
+1878	"Ana Espinoza Muñoz"	14
+1200	"Lucía Fuentes Morales"	14
 
 
 
-"IDPaciente"	"Nombres"	"Total_inasistencias"
-300	"Paula"	3
-2299	"Ana Pedro"	3
-2326	"María"	3
-1673	"Ana Paula"	3
-418	"Isabel"	3
+
+"IDPaciente"	"Nombre"	"Total_inasistencias"
+2299	"Ana Pedro González"	3
+418	"Isabel González"	3
+2326	"María Martínez Martínez"	3
+300	"Paula Torres Araya"	3
+1673	"Ana Paula López Rojas"	3
 
 
 

@@ -1,0 +1,8 @@
+"Titulo"	"nombre_paciente"	"RUT_paciente"	"diagnostico"	"medicamento"	"posologia"	"fecha"	"nombre_doctor"	"Rut_doctor"
+"Receta Médica electrónica"	"Isabel Flores López"	"738274-K"	"Asma"	"GLUCAGON 1 MG LIOF SOL INYECT FAM"	" 1 cápsula en ayunas cada mañana por 4 semanas."	"2025-03-01"	"Daniel Antonio Díaz Rodríguez"	"737881-5"
+
+
+
+
+"Titulo"	"nombre_paciente"	"RUT_paciente"	"diagnostico"	"medicamento"	"posologia"	"fecha"	"nombre_doctor"	"Rut_doctor"
+"Receta Médica electrónica Psicotrópicos"	"Daniel Soto González"	"129414-8"	"Depresión mayor"	"REMIFENTANILO 1 MG LIOF P/SOL INY IV FAM"	" 1 gramo cada 24 horas por 5 días."	"2025-01-30"	"Isabel José Rojas"	"297883-0"

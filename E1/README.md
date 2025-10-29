@@ -14,7 +14,6 @@
 
 
 ### 2. Entidades Débiles
-
 #### 2.1 Receta_Medicamento
 Se identifico **Receta_Medicamento** como entidad débil porque no existe sin una receta, su llave primaria esta compuesta por "Receta_Id" (proveniente de Receta) y "Codigo_generico"(proveniente de Maestro farmacia).
 
@@ -23,7 +22,6 @@ Se identifico **Orden_procedimiento** como entidad débil porque no existe sin u
 
 
 ### 3. Llaves Primarias  y Compuestas
-<!-- Justifica TODAS las llaves: primaria simple y primaria compuesta -->
 #### 3.1 Persona
 La llave primaria de __Persona__ es  __Rut__ porque existe un rut unico por cada persona.
 
@@ -62,7 +60,6 @@ La llave compuesta de __Plan_bonificacion__ es (__Codigo_isapre__, __Grupo_aranc
 
 
 ### 4. Relaciones
-<!-- Justifica TODAS las relaciones de tu modelo -->
 #### 4.1 Atendido_en
 Relaciona la entidad __Paciente__ y la entidad __Consulta__, porque cada paciente tiene que ser admitido en una consulta de un medico.
 
@@ -101,7 +98,6 @@ Relaciona la entidad __Instituciones previsionales de salud__ y la entidad __Pla
 
 
 ### 5. Cardinalidades
-<!-- Explica la cardinalidad en CADA relación del modelo -->
 #### 5.1 Persona - Afiliacion (1 -- 1)
 - Una persona puede tener 0 o 1 afiliacion.
 - Una afiliacion corresponde a exactamente una persona.
@@ -152,7 +148,6 @@ Relaciona la entidad __Instituciones previsionales de salud__ y la entidad __Pla
 
 
 ### 6. Jerarquías
-<!-- Identifica y justifica TODAS las jerarquías -->
 #### 6.1 Persona - Paciente - Staff
 Se modelo una jerarquía donde **Persona** es la entidad padre y **Paciente** y **Staff** heredan de ella, porque permite representar roles multiples de una persona, como medico que tambien puede ser paciente.
 
@@ -161,33 +156,32 @@ Se modelo una jerarquía donde **Staff** es la entidad padre y **Medico** y **Ad
 
 
 ### 7. Esquema Relacional
-<!-- Construye el esquema relacional a partir de tu Modelo E/R -->
 
 **Persona**( <u>rut</u>: VARCHAR, nombres: VARCHAR, apellidos: VARCHAR, telefono: INT, correo: VARCHAR, direccion: VARCHAR, profesion: VARCHAR )
 
 **Medico**( profecion: VARCHAR )
 
-**Instituciones previsionales de salud**( codigo: INT, nombre: VARCHAR, enlace: VARCHAR, rut: VARCHAR, tipo: VARCHAR ) 
+**Instituciones previsionales de salud**( <u>codigo</u>: INT, nombre: VARCHAR, enlace: VARCHAR, rut: VARCHAR, tipo: VARCHAR ) 
 
-**Afiliacion**( rut_persona: VARCHAR, codigo_institucion: INT, rut_titular: VARCHAR, tipo_afiliacion: VARCHAR )
+**Afiliacion**( <u>rut_persona</u>: VARCHAR, codigo_institucion: INT, rut_titular: VARCHAR, tipo_afiliacion: VARCHAR )
 
-**Plan_bonificacion**( codigo_isapre: VARCHAR , grupo_arancel: VARCHAR, porcentaje: INT )
+**Plan_bonificacion**( <u>codigo_isapre</u>: VARCHAR , <u>grupo_arancel</u>: VARCHAR, porcentaje: INT )
 
-**Maestro_farmacia**( codigo_generico: INT, descripcion_producto: VARCHAR, nombre_producto: VARCHAR, tipo_producto: VARCHAR, codigo_ONU: INT, clasificacion_ONU: VARCHAR, clasificacion_interna: VARCHAR, estado_codigo: VARCHAR, canasta_esencial: BOOLEAN, precio: INT )
+**Maestro_farmacia**( <u>codigo_generico</u>: INT, descripcion_producto: VARCHAR, nombre_producto: VARCHAR, tipo_producto: VARCHAR, codigo_ONU: INT, clasificacion_ONU: VARCHAR, clasificacion_interna: VARCHAR, estado_codigo: VARCHAR, canasta_esencial: BOOLEAN, precio: INT )
 
-**Arancel_FONASA**( codigo: INT, codigo_adicional: INT, consultas_y_atencion: VARCHAR, valor: INT, grupo: VARCHAR, tipo: VARCHAR )
+**Arancel_FONASA**( <u>codigo</u>: INT, <u>codigo_adicional</u>: INT, consultas_y_atencion: VARCHAR, valor: INT, grupo: VARCHAR, tipo: VARCHAR )
 
-**Arancel_DCColita**( codigo_interno: INT, codigo_fonasa: INT, consultas_y_atencion: VARCHAR, valor: INT )
+**Arancel_DCColita**( <u>codigo_interno</u>: INT, codigo_fonasa: INT, consultas_y_atencion: VARCHAR, valor: INT )
 
-**Consulta**( consulta_id: INT, fecha: DATE, diagnostico: VARCHAR, paciente_rut: VARCHAR, doctor_rut: VARCHAR )
+**Consulta**( <u>consulta_id</u>: INT, fecha: DATE, diagnostico: VARCHAR, paciente_rut: VARCHAR, doctor_rut: VARCHAR )
 
-**Receta**( receta_id: INT, fecha: DATE, diagnostico: VARCHAR, paciente_rut: VARCHAR, doctor_rut: VARCHAR, codigo_auth: VARCHAR )
+**Receta**( <u>receta_id</u>: INT, fecha: DATE, diagnostico: VARCHAR, paciente_rut: VARCHAR, doctor_rut: VARCHAR, codigo_auth: VARCHAR )
 
-**Orden**( orden_id: INT, fecha: DATE, diagnostico: VARCHAR, paciente_rut: VARCHAR, doctor_rut: VARCHAR )
+**Orden**( <u>orden_id</u>: INT, fecha: DATE, diagnostico: VARCHAR, paciente_rut: VARCHAR, doctor_rut: VARCHAR )
 
-**Receta_medicamento**( receta_id: INT, codigo_generico: INT, cantidad: INT, dosis: VARCHAR, observaciones: VARCHAR )
+**Receta_medicamento**( <u>receta_id</u>: INT, <u>codigo_generico</u>: INT, cantidad: INT, dosis: VARCHAR, observaciones: VARCHAR )
 
-**Orden_procedimiento**( orden_id: INT, codigo_fonasa: INT, cantidad: INT, observaciones: VARCHAR )
+**Orden_procedimiento**( <u>orden_id:</u> INT, <u>codigo_fonasa</u>: INT, cantidad: INT, observaciones: VARCHAR )
 
 
 ### 8. Consistencia y Normalización en BCNF

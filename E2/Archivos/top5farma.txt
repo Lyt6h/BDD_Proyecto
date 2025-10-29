@@ -1,6 +1,6 @@
-"IDPaciente"	"count"
-1196	6
-1742	6
-1674	6
-1666	6
-1712	6
+"ID_persona"	"Nombre"	"Medicamento"	"cantidad_recetas"
+2654	"José Valenzuela"	"CAFEINA CITRATO 20 MG/ML SOL.PERF AM/FAM"	2
+959	"Javier Pedro Espinoza Rodríguez"	"CARBAMAZEPINA 400 MG CM LIB.PROLONG/SOST"	2
+598	"Diego Laura Araya"	"ABACAV/LAMIV/DOLUTEGRAV 600/300/50 MG CM"	2
+465	"Andrés Francisco Valenzuela López"	"ACIDO FOLICO 1 MG CM/CM REC"	1
+2292	"Francisco Rojas Díaz"	"DOLUTEGRAVIR 10 MG CM DISPERSABLE"	1

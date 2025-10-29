@@ -1,0 +1,12 @@
+"institucion_salud"	"Cantidad_beneficiarios_titulares"	"Cantidad_beneficiarios_no_titulares"
+"Colmena de avispas S.A."	65	19
+"Cruz de Malta S.A."	58	11
+"Cruz pal cielo Ltda."	59	6
+"especial S.A."	68	10
+"FONASA"	66	13
+"Fundación e imperio"	64	17
+"Medibanc S.A."	52	10
+"Menos vida S.A."	71	16
+"Salud Ltda."	66	12
+"sinsalud S.A."	63	17
+"Vida uno S.A."	69	15

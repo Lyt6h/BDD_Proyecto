@@ -1,6 +1,6 @@
-"Nombres"	"Apellidos"	"Cantidad_Diagnosticos"
-"Pedro"	"López"	6
-"Pedro"	"González"	5
-"Francisco"	"López"	5
-"Juan"	"Silva"	5
-"Miguel"	"Fuentes"	5
+"ID"	"nombre"	"Cantidad_Diagnosticos_diff"
+2	"Daniel Díaz Torres"	3
+3	"Miguel Díaz Hernández"	3
+5	"José Rojas López"	3
+6	"Javier Carmen Sepúlveda Martínez"	3
+1	"Marta Javier Silva Rodríguez"	3

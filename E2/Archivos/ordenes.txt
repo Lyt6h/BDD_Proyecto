@@ -1,0 +1,5 @@
+"Titulo"	"nombre_paciente"	"RUT_paciente"	"nombre_doctor"	"Rut_doctor"	"fecha"	"examen"
+"Orden de examen"	"Isabel Flores López"	"738274-K"	"Daniel Antonio Díaz Rodríguez"	"737881-5"	"2025-03-01"	"Laringocele  trat quir"
+"Orden de examen"	"Isabel Flores López"	"738274-K"	"Daniel Antonio Díaz Rodríguez"	"737881-5"	"2025-03-01"	"Anticuerpo antiendomisio (EMA  antimembrana basal glomerular (GBM)  antireticulina  por IFI c/u"
+"Orden de examen"	"Isabel Flores López"	"738274-K"	"Daniel Antonio Díaz Rodríguez"	"737881-5"	"2025-03-01"	"Colocación o extracción de dispositivo intrauterino (no incluye el valor del dispositivo)"
+"Orden de examen"	"Isabel Flores López"	"738274-K"	"Daniel Antonio Díaz Rodríguez"	"737881-5"	"2025-03-01"	"Ablación troncos venosos con técnica térmica (laser  radiofrecuencia u otras)"
