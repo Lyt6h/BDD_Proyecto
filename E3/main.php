@@ -9,7 +9,7 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
     $ok_handle = fopen($ok_file, 'a');
     $err_handle = fopen($err_file, 'a');
 
-    $header = fgetcsv($handle,0,';');
+    $header = fgetcsv($handle,0,';','"', '\\');
     $row_csv = implode(';', $header) . "\n";
     fputs($ok_handle, $row_csv);
     fputs($err_handle, $row_csv);
@@ -18,14 +18,14 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
     $line_count = 1;
 
     //Procesar linea por linea
-    while (($data = fgetcsv($handle,0,';')) !== FALSE) {
-        $line_count++;
-        $original_data_str = implode(';', $data);
-        $is_ok = true;
+    while (($data = fgetcsv($handle,0,';','"', '\\')) !== FALSE) { // En esta linea y en la 12 se me presentaba un 
+        $line_count++;  $line_csv = $line_count .'';                                                           // aviso en la terminal, faltaba ponerle
+        $original_data_str = implode(';', $data);                                            // otros argumentos, pero no endiendo del todo
+        $is_ok = true;                                                                                         // para que sirven.
         $log_message = "Línea $line_count, ID: " . ($data[0] ?? 'N/A') . " - ";
 
         //Validar y corregir RUN
-        if (isset($data[1]) && !preg_match('/^[1-9][0-9]{5,}-[0-9Kk]$/', $data[1])) {
+        if (isset($data[1]) && !preg_match('/^[1-9][0-9]{5}-[0-9Kk]$/', $data[1])) {
             $log_message .= "RUN mal formado ('{$data[1]}'): Se registra como ERROR.";
             $is_ok = false;
         }
@@ -35,17 +35,17 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             $email = $data[5];
 
             if (preg_match('/[^\x20-\x7E]/', $email)) {                                        
-                $log_message .= "Correo con acentos/c.especiales ('{$email}'): Se cambia a NULL para la carga. ";//Anulacion de correos
+                $log_message .= "Correo con acentos/c.especiales ('{$email}'): Se cambia a NULL. ";// Anulacion de correos
                 $data[5] = '';                                                                                   
 
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $corrected_email = str_replace('..', '.', $email);//caso de dobles puntos
+                $corrected_email = str_replace('..', '.', $email);// caso de dobles puntos
                 
                 if (filter_var($corrected_email, FILTER_VALIDATE_EMAIL)) {
                     $log_message .= "Correo corregido (doble punto): '{$email}' -> '{$corrected_email}'. ";
                     $data[5] = $corrected_email;
                 } else {
-                    $log_message .= "Correo mal formado e irreparable ('{$email}'): Se registra como ERROR.";//caso de correo irreparable
+                    $log_message .= "Correo mal formado e irreparable ('{$email}'): Se registra como ERROR.";// caso de correo irreparable
                     $is_ok = false;
                 }
             }
@@ -59,12 +59,17 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             }
         }
 
-
         //Validar rol
-        //Formatos esperados: {Staff médico, administrativo, paciente, NULL}
         if (isset($data[9]) && $data[9] !== '') {
-            $roles_validos = ['Staff médico', 'administrativo', 'paciente', 'Staff médico,paciente', 'administrativo,paciente'];
-            // Permitiendo combinaciones válidas como Staff médico,paciente
+            $roles_validos = [
+                'Staff médico',
+                'administrativo', 
+                'paciente', 
+                'Staff médico,paciente', 
+                'administrativo,paciente',
+                'paciente,Staff médico', 
+                'paciente,administrativo'
+            ];
             $current_roles = array_map('trim', explode(',', $data[9]));
             $rol_valido = true;
 
@@ -74,14 +79,131 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
                     break;
                 }
             }
-            //Si el rol es una combinación no válida o un valor simple incorrecto, lo marcamos como error
             if (!$rol_valido && !in_array($data[9], $roles_validos)) {
-                $log_message .= "Rol inválido ('{$data[9]}'): Se registra como ERROR.";
-                $is_ok = false;
+                $log_message .= "Rol inválido ('{$data[9]}'): Se cambia a NULL.";
+                $data[9] = '';
             }
         }
         
-        //Otras validaciones y correcciones (tipo, profesión, especialidad, InsSalPrev, etc.) irían aquí
+        //Validar tipo
+        if (isset($data[7]) && $data[7] !== '') {
+            $tipo_value = trim($data[7]);
+            $lower_tipo_value = strtolower($tipo_value);
+            $valid_tipos = ['beneficiario', 'titular'];
+            
+            if (!in_array($lower_tipo_value, $valid_tipos)) {
+                $log_message .= "Tipo inválido ('{$tipo_value}'): Se cambia a NULL. ";
+                $data[7] = '';
+            } elseif ($tipo_value !== $lower_tipo_value) {
+                $log_message .= "Tipo mal escrito ('{$tipo_value}'): Se normaliza a '{$lower_tipo_value}'. ";
+                $data[7] = $lower_tipo_value;
+            }
+        }
+
+        //Validar titular
+        if (isset($data[8]) && $data[8] !== '') {
+            $titular_run = trim($data[8]);
+
+            if (!preg_match('/^[1-9][0-9]{5}-[0-9Kk]$/i', $titular_run)) { 
+                $log_message .= "Titular RUN mal escrito ('{$titular_run}'): Se cambia a NULL. ";
+                $data[8] = ''; 
+            }
+        }         
+
+        //Validar Nombre
+        if (!isset($data[2]) || trim($data[2]) === '') {
+            $log_message .= "Nombre faltante/vacío: Violación de NOT NULL. Se registra como ERROR. ";
+            $is_ok = false;
+            
+        }
+
+        //Validar Apellido
+        if (!isset($data[3]) || trim($data[3]) === '') {
+            $log_message .= "Apellido faltante/vacío: Violación de NOT NULL. Se registra como ERROR. ";
+            $is_ok = false; 
+            
+        } 
+
+        //Validar dirccion
+        if (isset($data[4]) && trim($data[4]) !== '') {
+            $direccion_value = trim($data[4]);
+            $length = strlen($direccion_value); 
+
+            if ($length > 100) {
+                $log_message .= "Dirección excede 100 caracteres ({$length}): Se cambia a NULL. ";
+                $data[4] = '';
+                
+            } else {
+
+                $data[4] = $direccion_value; 
+            }
+        } 
+
+        //Validar Profesion
+        if (isset($data[10]) && trim($data[10]) !== '') {
+            $valid_profesiones = [
+            'tens', 
+            'enfermero/a', 
+            'kinesiólogo/a', 
+            'médico/a'
+            ];
+            $profesion_value = trim($data[10]);
+            $lower_profesion_value = strtolower($profesion_value);
+            
+            if (!in_array($lower_profesion_value, $valid_profesiones)) {
+                $log_message .= "Profesión inválida ('{$profesion_value}'): Se cambia a NULL. ";
+                $data[10] = ''; 
+            } else {
+                if ($profesion_value !== $lower_profesion_value) {
+                    $log_message .= "Profesión corregida: '{$profesion_value}' -> '{$lower_profesion_value}'. ";// Normaliza a minusculas
+                }
+                $data[10] = $lower_profesion_value; 
+            }
+        }  
+
+        //validar Especialidad
+        $profesion_value = $data[10]; 
+
+        if (isset($data[11]) && trim($data[11]) !== '') {
+            $especialidad_value = trim($data[11]);
+            $length = strlen($especialidad_value); 
+
+            if ($profesion_value === 'medico') {
+                if ($length > 30) {
+                    $log_message .= "Especialidad excede 30 caracteres ({$length}): Se cambia a NULL. ";
+                    $data[11] = '';
+                } else {
+                    $data[11] = $especialidad_value; 
+                }
+            } else {
+                $log_message .= "Especialidad ('{$especialidad_value}') inválida para '{$profesion_value}': Se cambia a NULL. ";
+                $data[11] = '';
+            }
+        } 
+
+        //Validar fimra
+        if (isset($data[12]) && trim($data[12]) !== '') {
+            $firma_value = trim($data[12]);
+            $length = strlen($firma_value);                                         // asumire que el path esta bien
+                                                                                            // escrito en el csv, y que el archivo 
+            if ($length > 30) {                                                             // existe en /firmas
+                $log_message .= "Firma excede 30 caracteres ({$length}): Se cambia a NULL. ";
+                $data[12] = ''; 
+            }
+        } 
+
+        //Validar InsSalPrev
+        if (isset($data[13]) && trim($data[13]) !== '') {
+            $inssalprev_value = trim($data[13]);
+            $length = strlen($inssalprev_value);
+
+            if ($length > 30) {
+                $log_message .= "InsSalPrev excede 30 caracteres ({$length}): Se cambia a NULL. ";
+                $data[13] = '';
+            } else {
+                $data[13] = $inssalprev_value; 
+            }
+        } 
 
         //Resultado del procesamiento de la tupla
         if ($is_ok) {
@@ -90,13 +212,17 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             fputs($ok_handle, $output_row);
             
             //Registrar en el LOG si se corrigio 
-            if (strpos($log_message, 'corregido:') !== false || strpos($log_message, 'reemplaza por') !== false) {
-                 write_log($log_file, $log_message . "Acción: CORREGIDO y CARGADO en {$basename}OK.csv");
+            if (strpos($log_message, 'corregido:') !== false || 
+            strpos($log_message, 'reemplaza por') !== false || 
+            strpos($log_message, 'cambia a NULL') !== false ||
+            strpos($log_message, 'normaliza a') !== false || 
+            strpos($log_message, 'corregida:') !== false
+            ) {
+                write_log($log_file, $log_message . "Acción: CORREGIDO y CARGADO en {$basename}OK.csv");
             }
-
         } else {
             //Escribir en el archivo ERR
-            $output_row = $original_data_str . "\n"; //Escribimos la fila original con error
+            $output_row = $original_data_str . "\n"; // Escribimos la fila original con error
             fputs($err_handle, $output_row);
             write_log($log_file, $log_message . "Acción: DESCARTADO y CARGADO en {$basename}ERR.csv");
         }
@@ -106,6 +232,16 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
     fclose($err_handle);
     fclose($handle);
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -141,13 +277,6 @@ foreach ($csv_files as $filepath) {
     @unlink($log_file);
 
     $handle = fopen($filepath, 'r');
-
-    ///// TEMP en caso de error/////////////////////
-    if (!$handle) {/////////////////////////////////
-        echo "No se pudo abrir $basename.csv\n";////
-        continue;///////////////////////////////////
-    }///////////////////////////////////////////////
-    ////
 
     if ($basename == 'Arancel DCColita de rana') {
         echo "Advertencia: Limpiador para '{$basename}' no implementado aún.\n";
