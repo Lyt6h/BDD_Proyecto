@@ -4,6 +4,24 @@ function write_log($filename, $message) {
     file_put_contents($filename, $message . PHP_EOL, FILE_APPEND);
 }
 
+//Funcion para cambiar acentos o caracteres especiales de tipo √[x]
+function text_replace($text){
+    $mapa_errores = [
+        '√°' => 'á',
+        '√©' => 'é',
+        '√≠' => 'í',
+        '√≥' => 'ó',
+        '√∫' => 'ú',
+        '√±' => 'ñ',
+        '√ç'=> 'Í',
+        '√Å'=> 'Á',
+        '√ì'=> 'Ó',
+    ];
+    $corrected_text = str_replace(array_keys($mapa_errores), array_values($mapa_errores), $text);
+
+    return $corrected_text;
+}
+
 function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
     
     $ok_handle = fopen($ok_file, 'a');
@@ -13,7 +31,6 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
     $row_csv = implode(';', $header) . "\n";
     fputs($ok_handle, $row_csv);
     fputs($err_handle, $row_csv);
-
 
     $line_count = 1;
 
@@ -227,10 +244,144 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             write_log($log_file, $log_message . "Acción: DESCARTADO y CARGADO en {$basename}ERR.csv");
         }
     }
-
     fclose($ok_handle);
     fclose($err_handle);
     fclose($handle);
+}
+
+function orden_handle($handle, $basename, $log_file, $err_file, $ok_file) {
+    
+    $ok_handle = fopen($ok_file, 'a');
+    $err_handle = fopen($err_file, 'a');
+
+    $header = fgetcsv($handle,0,';','"', '\\');
+    $row_csv = implode(';', $header) . "\n";
+    fputs($ok_handle, $row_csv);
+    fputs($err_handle, $row_csv);
+
+    $line_count = 1;
+
+    //procesar linea por linea
+    while (($data = fgetcsv($handle,0,';','"', '\\')) !== FALSE) {
+        $line_count++;
+        $original_data_str = implode(';', $data);
+        $is_ok = true;
+        $log_message = "Línea $line_count, IDAtencion: " . ($data[0] ?? 'N/A') . " - ";
+
+        //Validar Consulta
+        if (isset($data[2]) && trim($data[2]) !== '') {
+            $consulta_value = trim($data[2]);
+
+            $corrected_value = text_replace($consulta_value); // limpiamos los caracteres
+
+            if ($corrected_value !== $consulta_value) {
+                $log_message .= "Consulta corregida: Se corrigió acentos/caracteres especiales. ";
+                $consulta_value = $corrected_value;
+            }
+
+            $length = strlen($consulta_value); 
+
+            if ($length > 100) {
+                $log_message .= "Consulta excede 100 caracteres ({$length}): Se cambia a NULL. ";
+                $data[2] = '';
+
+            } else {
+                $data[2] = $consulta_value; 
+            }
+        } 
+
+        if ($is_ok) {
+            $output_row = implode(';', $data) . "\n";
+            fputs($ok_handle, $output_row);
+            if (strpos($log_message, 'corregido:') !== false || strpos($log_message, 'reemplaza por') !== false || strpos($log_message, 'cambia a NULL') !== false || strpos($log_message, 'normaliza a') !== false) {
+                    write_log($log_file, $log_message . "Acción: CORREGIDO y CARGADO en {$basename}OK.csv");
+            }
+        } else {
+            $output_row = $original_data_str . "\n";
+            fputs($err_handle, $output_row);
+            write_log($log_file, $log_message . "Acción: DESCARTADO y CARGADO en {$basename}ERR.csv");
+        }
+    }
+    fclose($ok_handle);
+    fclose($err_handle);
+    fclose($handle);
+}
+
+function medicamento_handle($handle, $basename, $log_file, $err_file, $ok_file) {
+        
+    $ok_handle = fopen($ok_file, 'a');
+    $err_handle = fopen($err_file, 'a');
+
+    $header = fgetcsv($handle,0,';','"', '\\');
+    $row_csv = implode(';', $header) . "\n";
+    fputs($ok_handle, $row_csv);
+    fputs($err_handle, $row_csv);
+
+    $line_count = 1;
+
+    //procesar linea por linea
+    while (($data = fgetcsv($handle,0,';','"', '\\')) !== FALSE) {
+        $line_count++;
+        $original_data_str = implode(';', $data);
+        $is_ok = true;
+        $log_message = "Línea $line_count, IDAtencion: " . ($data[0] ?? 'N/A') . " - ";
+
+        //Validar nombre_medicamento
+        if (isset($data[1]) && trim($data[1]) !== '') {
+            $direccion_value = trim($data[1]);
+            $length = strlen($direccion_value); 
+
+            if ($length > 100) {
+                $log_message .= "Medicamento excede 100 caracteres ({$length}): Se cambia a NULL. ";
+                $data[1] = '';
+            } else {
+                $data[1] = $direccion_value; 
+            }
+        }
+
+        //Validar posologia
+        if (isset($data[2]) && trim($data[2]) !== '') {
+            $direccion_value = trim($data[2]);
+            $length = strlen($direccion_value); 
+
+            if ($length > 100) {
+                $log_message .= "Posología excede 100 caracteres ({$length}): Se cambia a NULL. ";
+                $data[2] = '';
+            } else {
+                $data[2] = $direccion_value; 
+            }
+        }
+        
+        //validar Psicotropico
+        $booleans = ['true','false'];
+        if (isset($data[3]) && trim($data[3]) !== '') {                                         // cuando no es bool lo tira a err, ya que no me quiero
+            $value = strtolower(trim($data[3]));                                        // arriesgar a recetar un medicamento sin toda su informacion
+
+            if (!in_array($value, $booleans)) {
+                $log_message .= "Psicotrópico inválido ('{$data[3]}'): Debe ser booleano. Se registra como ERROR. ";
+                $is_ok = false;
+            }
+        }
+
+        if ($is_ok) {
+            $output_row = implode(';', $data) . "\n";
+            fputs($ok_handle, $output_row);
+            if (strpos($log_message, 'corregido:') !== false || strpos($log_message, 'reemplaza por') !== false || strpos($log_message, 'cambia a NULL') !== false || strpos($log_message, 'normaliza a') !== false) {
+                    write_log($log_file, $log_message . "Acción: CORREGIDO y CARGADO en {$basename}OK.csv");
+            }
+        } else {
+            $output_row = $original_data_str . "\n";
+            fputs($err_handle, $output_row);
+            write_log($log_file, $log_message . "Acción: DESCARTADO y CARGADO en {$basename}ERR.csv");
+        }
+    }
+    fclose($ok_handle);
+    fclose($err_handle);
+    fclose($handle);
+}
+
+function plan_handle($handle, $basename, $log_file, $err_file, $ok_file) {
+    
 }
 
 
@@ -289,9 +440,20 @@ foreach ($csv_files as $filepath) {
     } elseif ($basename == 'Instituciones previsionales de salud') {
         echo "Advertencia: Limpiador para '{$basename}' no implementado aún.\n";
     } elseif ($basename == 'Medicamento') {
-        echo "Advertencia: Limpiador para '{$basename}' no implementado aún.\n";
+        medicamento_handle(
+            $handle,
+            $basename, 
+            $log_file, 
+            $err_file, 
+            $ok_file);
     } elseif ($basename == 'Orden') {
-        echo "Advertencia: Limpiador para '{$basename}' no implementado aún.\n";
+        orden_handle(
+            $handle,
+            $basename,
+            $log_file,
+            $err_file,
+            $ok_file
+        );
     } elseif ($basename == 'Persona') {
         persona_handle(
             $handle,
