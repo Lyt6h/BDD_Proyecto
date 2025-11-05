@@ -1176,9 +1176,11 @@ foreach ($new_csv_files as $filepath) {
     echo "\nProcesando archivo: $basename.csv...\n";
 
     //Crea una carpeta para cada csv
-    !file_exists("$output_planes_dir/$basename");
+    $csv_dir = "$output_planes_dir/$basename";
+    if(!file_exists("$csv_dir")) {
+        mkdir("$csv_dir");
+    }
 
-// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     $ok_plan_file = "$output_planes_dir/{$basename}/{$basename}OK.csv";
     $err_plan_file = "$output_planes_dir/{$basename}/{$basename}ERR.csv";
     $log_plan_file = "$output_planes_dir/{$basename}/{$basename}LOG.txt";
