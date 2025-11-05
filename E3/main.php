@@ -249,14 +249,17 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
                 $log_message .= "Firma excede 30 caracteres ({$length}): Se cambia a NULL. ";
                 $data[12] = ''; 
             }
+            $firma_og = $firma_value;
             $firma_value = str_replace("firma", "firmas", "$firma_value");
             $full_path_archivo = __DIR__ . str_replace(".","",$firma_value);
 
             if (!file_exists($full_path_archivo)) {
-
-                $is_ok = false;
+                $log_message .= "Firma ('{$firma_og}'): El archivo de imagen no fue encontrado en la ruta. Se registra como NULL. ";
+                $data[12] = "";
+            } else {
+                $log_message .= "Firma ('{$firma_og}') mal escrita: Se cambia {$firma_og} -> {$firma_value}. ";
+                $data[12] = $firma_value;
             }
-            $data[12] = $firma_value;
         } elseif (isset($data[12])) {
             $data[12] = "";
         }

@@ -3,7 +3,7 @@
 ### Datos del Alumno
 | **Apellidos**       | **Nombres**          | **Número de Alumno** |
 |---------------------|----------------------|----------------------|
-| Apellido1 Apellido2 | Nombre 1 Nombre 2    |12345678              |
+| Palomera Coccio | Matias Felipe    |24664235              |
 
 ### 1. Esquema Base de Datos 
 <!-- Inserta aquí la imagen del esquema Usa el formato svg para evitar la perdida de calidad. Reemplaza "diagrama.svg" por la ruta a tu archivo -->
@@ -28,6 +28,43 @@ Indicar los registros con correos con tildes
 Indicar los registros con atributo PK duplicado
 
 ### 3. Instrucciones de ejecución de Entrega
-<!-- Indica las instrucciones para ejecutar el archivo PHP y SQL -->
+Para ejecutar el main.php y carga.sql, se espera que los archivos estén ubicados en una estructura como esta:
+```
+.
+│   
+└── E3/
+    ├── firmas/
+    │   └── *files
+    ├── planes/
+    │   └── *.csv
+    ├── *.csv
+    ├── carga.sql
+    ├── main.php
+    └── README.md
+```
+Al ejecutar `php main.php` se creará la carpeta /outputs, en el caso de que se quiera VOLVER A EJECUTAR main.php, se tiene que borrar manuelmente la carpeta /outputs.  
+Despues de la ejecución quedaría asi:
+```
+.
+│   
+└── E3/
+    ├── firmas/
+    │   └── *files
+    ├── outputs/
+    │   ├── dircsv/
+    │   │   ├── fileERR.csv
+    │   │   ├── fileLOG.txt
+    │   │   └── fileOK.csv
+    │   ├──...
+    │   ...
+    ├── planes/
+    │   └── *.csv
+    ├── *.csv
+    ├── carga.sql
+    ├── main.php
+    └── README.md
+```
+Al eje
+
 
 ### 4. Observaciones adicionales
