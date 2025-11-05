@@ -245,7 +245,7 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             $firma_value = trim($data[12]);
             $length = strlen($firma_value);                                         // asumire que el path esta bien
                                                                                             // escrito en el csv, y que el archivo 
-            if ($length > 30) {                                                             // existe en /firmas
+            if ($length > 30) {                                                             // existe en .../firmas
                 $log_message .= "Firma excede 30 caracteres ({$length}): Se cambia a NULL. ";
                 $data[12] = ''; 
             }
