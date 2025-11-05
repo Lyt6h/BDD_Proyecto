@@ -15,10 +15,10 @@ function text_replace($text){
         '√±' => 'ñ',
         '√ç'=> 'Í',
         '√Å'=> 'Á',
-        '√ì'=> 'Ó',
+        '√ì'=> 'Ó'
     ];
     $corrected_text = str_replace(array_keys($mapa_errores), array_values($mapa_errores), $text);
-
+    
     return $corrected_text;
 }
 
@@ -457,6 +457,16 @@ function plan_handle($handle, $basename, $log_file, $err_file, $ok_file) {
         //Validar Grupo
         if (isset($data[1]) && trim($data[1]) !== '') {
             $grupo_value = trim($data[1]);
+            
+            $corrected_value = str_replace("�","I", $grupo_value);
+
+            if ($corrected_value !== $grupo_value) {
+                $log_message .= "Consulta corregida: Se corrigió acentos/caracteres especiales. ";
+                $grupo_value = $corrected_value;
+            }
+
+            $grupo_value = strtolower($grupo_value);
+
             $length = strlen($grupo_value); 
 
             if ($length > 100) {
@@ -706,7 +716,6 @@ function arancel_fonasa_handle($handle, $basename, $log_file, $err_file, $ok_fil
     fclose($err_handle);
     fclose($handle);
 }
-
 
 function i_salud_handle($handle, $basename, $log_file, $err_file, $ok_file) {
     
@@ -1159,55 +1168,51 @@ foreach ($csv_files as $filepath) {
 }
 //los CSV de la carpeta base estan listos, pero faltan los planes, que tan en una carpeta aparte
 
-$planes_dir = __DIR__ . '/planes';
-$output_planes_dir = $output_dir . '/planes';
-
 //Crear carpeta outputs/planes
-if (!file_exists($output_planes_dir)) {
-    mkdir($output_planes_dir);
+if (!file_exists("$output_dir/planes")) {
+    mkdir("$output_dir/planes");
     echo "Carpeta 'outputs' creada.\n";
 }
 
-$new_csv_files = glob($planes_dir . '/*.csv');
+//Buscar todos los archivos CSV en la carpeta base
+$csv_files = glob("$input_dir/planes/*.csv");
 
-foreach ($new_csv_files as $filepath) {
-    $basename = basename($filepath,'.csv');
-
+//Procesar cada archivo
+foreach ($csv_files as $filepath) {
+    $basename = basename($filepath, '.csv');
+    $basename = rtrim($basename, '. ');
     echo "\nProcesando archivo: $basename.csv...\n";
 
     //Crea una carpeta para cada csv
-    $csv_dir = "$output_planes_dir/$basename";
-    if(!file_exists("$csv_dir")) {
-        mkdir("$csv_dir");
-    }
+    mkdir("$output_dir/planes/$basename");
 
-    $ok_plan_file = "$output_planes_dir/{$basename}/{$basename}OK.csv";
-    $err_plan_file = "$output_planes_dir/{$basename}/{$basename}ERR.csv";
-    $log_plan_file = "$output_planes_dir/{$basename}/{$basename}LOG.txt";
+    $ok_file = "$output_dir/planes/{$basename}/{$basename}OK.csv";
+    $err_file = "$output_dir/planes/{$basename}/{$basename}ERR.csv";
+    $log_file = "$output_dir/planes/{$basename}/{$basename}LOG.txt";
 
     //Limpiar logs previos por si se ejecuta otra vez
-    @unlink($ok_plan_file);
-    @unlink($err_plan_file);
-    @unlink($log_plan_file);
+    @unlink($ok_file);
+    @unlink($err_file);
+    @unlink($log_file);
 
     $handle = fopen($filepath, 'r');
 
-    if ($basename == 'Colmena de avispas S.A.') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
-    } elseif ($basename == 'Cruz de Malta S.A.') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
-    } elseif ($basename == 'Cruz pal cielo Ltda.') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
+    if ($basename == 'Colmena de avispas S.A') {
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
+    } elseif ($basename == 'Cruz de Malta S.A') {
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
+    } elseif ($basename == 'Cruz pal cielo Ltda') {
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
     } elseif ($basename == 'Fundación e imperio') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
     } elseif ($basename == 'medibanc') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
-    } elseif ($basename == 'Menos vida S.A.') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
+    } elseif ($basename == 'Menos vida S.A') {
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
     } elseif ($basename == 'salud') {
-        plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
-    } elseif ($basename == 'Vida uno S.A.') {
-       plan_handle($handle, $basename, $log_plan_file, $err_plan_file, $ok_plan_file);
+        plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
+    } elseif ($basename == 'Vida uno S.A') {
+       plan_handle($handle, $basename, $log_file, $err_file, $ok_file);
     }
 }
 
