@@ -243,13 +243,24 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
         //Validar fimra
         if (isset($data[12]) && trim($data[12]) !== '') {
             $firma_value = trim($data[12]);
-            $length = strlen($firma_value);                                         // asumire que el path esta bien
-                                                                                            // escrito en el csv, y que el archivo 
-            if ($length > 30) {                                                             // existe en .../firmas
+            $length = strlen($firma_value);                                         
+
+            if ($length > 30) {                                                             
                 $log_message .= "Firma excede 30 caracteres ({$length}): Se cambia a NULL. ";
                 $data[12] = ''; 
             }
-        } 
+            $firma_value = str_replace("firma", "firmas", "$firma_value");
+            $full_path_archivo = __DIR__ . str_replace(".","",$firma_value);
+
+            if (!file_exists($full_path_archivo)) {
+
+                $is_ok = false;
+            }
+            $data[12] = $firma_value;
+        } elseif (isset($data[12])) {
+            $data[12] = "";
+        }
+
 
         //Validar InsSalPrev
         if (isset($data[13]) && trim($data[13]) !== '') {
