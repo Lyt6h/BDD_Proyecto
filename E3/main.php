@@ -15,7 +15,12 @@ function text_replace($text){
         '√±' => 'ñ',
         '√ç'=> 'Í',
         '√Å'=> 'Á',
-        '√ì'=> 'Ó'
+        'á'=> 'a',
+        'é'=> 'e',
+        'í'=> 'i',
+        'ó'=> 'o',
+        'ú'=> 'u',
+        'ñ'=> 'n'
     ];
     $corrected_text = str_replace(array_keys($mapa_errores), array_values($mapa_errores), $text);
     
@@ -74,20 +79,25 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
         //Validar y corregir correo
         if (isset($data[5]) && $data[5] !== '') {
             $email = $data[5];
+            $og_email = $email;
 
-            if (preg_match('/[^\x20-\x7E]/', $email)) {                                        
-                $log_message .= "Correo con acentos/c.especiales ('{$email}'): Se cambia a NULL. ";// Anulacion de correos
-                $data[5] = '';                                                                                   
+            if (preg_match('/[^\x20-\x7E]/', $email)) {    
+                $cleaned_email = text_replace($email);
 
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                if ($cleaned_email !== $og_email) {
+                    $log_message .= "Correo con acentos/c.especiales CORREGIDO ('{$email}'): {$og_email} -> {$cleaned_email}";// Anulacion de correos
+                    $data[5] = $cleaned_email;
+                    $email = $cleaned_email;                                                                                   
+                }
+            } elseif (!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i', $email)) {
                 $corrected_email = str_replace('..', '.', $email);// caso de dobles puntos
                 
-                if (filter_var($corrected_email, FILTER_VALIDATE_EMAIL)) {
+                if (preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i', $corrected_email)) {
                     $log_message .= "Correo corregido (doble punto): '{$email}' -> '{$corrected_email}'. ";
                     $data[5] = $corrected_email;
                 } else {
-                    $log_message .= "Correo mal formado e irreparable ('{$email}'): Se registra como ERROR.";// caso de correo irreparable
-                    $is_ok = false;
+                    $log_message .= "Correo mal formado e irreparable ('{$email}'): Se registra como NULL.";// caso de correo irreparable
+                    $data[5] = '';
                 }
             }
         }
@@ -204,7 +214,7 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             'tens', 
             'enfermero/a', 
             'kinesiólogo/a', 
-            'médico/a'
+            'medico(a)'
             ];
             $profesion_value = trim($data[10]);
             $lower_profesion_value = strtolower($profesion_value);
@@ -227,7 +237,7 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
             $especialidad_value = trim($data[11]);
             $length = strlen($especialidad_value); 
 
-            if ($profesion_value === 'medico') {
+            if ($profesion_value === 'medico(a)') {
                 if ($length > 30) {
                     $log_message .= "Especialidad excede 30 caracteres ({$length}): Se cambia a NULL. ";
                     $data[11] = '';
@@ -518,7 +528,6 @@ function atencion_handle($handle, $basename, $log_file, $err_file, $ok_file) {
     //procesar linea por linea
     while (($data = fgetcsv($handle,0,';','"', '\\')) !== FALSE) {
         $line_count++;
-        $original_data_str = implode(';', $data);
         $is_ok = true;
         $log_message = "Línea $line_count, IDAtencion: " . ($data[0] ?? 'N/A') . " - ";
 
@@ -685,7 +694,7 @@ function arancel_fonasa_handle($handle, $basename, $log_file, $err_file, $ok_fil
                 $log_message .= "Valor inválido ('{$cleaned_valor}'): Debe ser un entero positivo. Se registra como NULL. ";
                 $data[3] = ''; 
             } else {
-                $data[3] = $valor_value;
+                $data[3] = $cleaned_valor;
             }
         } 
 
