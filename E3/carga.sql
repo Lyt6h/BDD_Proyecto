@@ -115,25 +115,3 @@ BEGIN;
 \COPY orden FROM "./outputs/Orden/OrdenOK.csv" DELIMITER ';' CSV HEADER;
 
 COMMIT;
-
-
-
-CREATE TABLE IF NOT EXISTS carga_log (
-    id SERIAL PRIMARY KEY,
-    mensaje TEXT,
-    fecha TIMESTAMP DEFAULT NOW()
-);
-
-DO $$
-DECLARE
-    err TEXT;
-BEGIN
-    IF EXISTS (SELECT 1 FROM persona WHERE run IS NULL OR nombre IS NULL) THEN
-        err := 'Se encontraron registros con valores NULL en tabla persona';
-        INSERT INTO carga_log(mensaje) VALUES (err);
-    END IF;
-END $$;
-
-\o ./outputs/cargaLOG.txt
-TABLE carga_log;
-\o

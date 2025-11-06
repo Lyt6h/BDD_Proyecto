@@ -1004,7 +1004,7 @@ function farmacia_handle($handle, $basename, $log_file, $err_file, $ok_file) {
         } else {
             $cod_value = trim($data[4]);
             if (!ctype_digit($cod_value)) {
-                $log_message .= "Código Minsal ('{$cod_value}'): No es un entero. Se registra como NULL. ";
+                $log_message .= "Código ONU ('{$cod_value}'): No es un entero. Se registra como NULL. ";
                 $data[4]    = '';   
             } else {
                 $data[4] = $cod_value;
@@ -1053,8 +1053,8 @@ function farmacia_handle($handle, $basename, $log_file, $err_file, $ok_file) {
             $valid_status = ['activo','inactivo'];
             
             if (!in_array($lower_status_value, $valid_status)) {
-                $log_message .= "Tipo inválido ('{$status_value}'): Se registra en ERROR. ";
-                $is_ok = false;
+                $log_message .= "Tipo inválido ('{$status_value}'): Se cambia a NULL. ";
+                $data[7] = '';
             } else  {
                 $data[7] = $status_value;
             }
