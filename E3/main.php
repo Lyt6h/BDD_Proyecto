@@ -57,7 +57,7 @@ function persona_handle($handle, $basename, $log_file, $err_file, $ok_file){
 
     //Procesar linea por linea
     while (($data = fgetcsv($handle,0,';','"', '\\')) !== FALSE) { // En esta linea y en la 12 se me presentaba un 
-        $line_count++;  $line_csv = $line_count .'';                                                           // aviso en la terminal, faltaba ponerle
+        $line_count++;                                                           // aviso en la terminal, faltaba ponerle
         $original_data_str = implode(';', $data);                                            // otros argumentos, pero no endiendo del todo
         $is_ok = true;                                                                                         // para que sirven.
         $log_message = "Línea $line_count, ID: " . ($data[0] ?? 'N/A') . " - ";
