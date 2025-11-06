@@ -7,7 +7,7 @@
 
 ### Esquema Base de Datos 
 
-![Esquema BD](tu_diagrama.svg)
+![Esquema BD](modelo.png)
 
 ### Data cleaning en PHP
 Hay datos que prefiero dejar en NULL a pesar de que dejarian la tupla basicamente inutilizable ya que pensando a futuro si quieren ingresar el dato valido correspondiente con el identificador de la tupla, se pueda añadir sin la nececidad de crear toda la tupla.
@@ -83,6 +83,11 @@ Despues de la ejecución quedaría asi:
 
 ### 4. Observaciones adicionales
 A partir de esta issue:  
+```
 **Subir los archivos al server Issues 106**  
-*Se deben subir los archivos .csv al servidor*  
-Subi los archivos .sql originales
+└──  Se deben subir los archivos .csv al servidor
+```
+Subi los archivos .sql originales  
+  
+    
+modelo.png es la imagen del modelo para la 1.
