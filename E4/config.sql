@@ -1,6 +1,6 @@
 -- 1.a) Indices secundarios
-CREATE INDEX RUN ON Persona(RUN);
-CREATE INDEX RUT ON InstituciondeSalud(RUT);        -- Verificar si esto es correcto
+CREATE INDEX Persona_RUN ON Persona(RUN);
+CREATE INDEX InstituciondeSalud_RUT ON InstituciondeSalud(RUT);        -- Verificar si esto es correcto
 
 -- 1.b) INdice primario
 ALTER TABLE "Agenda" ADD CONSTRAINT PK_agenda PRYMARY KEY ("ID", "Fecha", "Hora");
@@ -8,7 +8,7 @@ ALTER TABLE "Agenda" ADD CONSTRAINT PK_agenda PRYMARY KEY ("ID", "Fecha", "Hora"
 -- 1.c) Transacciones
 BEGIN;
 
-
+INSERT INTO ""
 
 COMMIT;
 
