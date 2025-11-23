@@ -1,3 +1,8 @@
+DROP INDEX IF EXISTS Persona_RUN;
+DROP INDEX IF EXISTS InstituciondeSalud_RUT;
+ALTER TABLE "Agenda" DROP CONSTRAINT PK_agenda;
+
+
 -- 1.a) Indices secundarios
 CREATE INDEX Persona_RUN ON "Persona"("RUN");
 CREATE INDEX InstituciondeSalud_RUT ON "InstituciondeSalud"("RUT");        -- Verificar si esto es correcto
@@ -138,14 +143,19 @@ BEGIN
 **/
 
     -- Crear o generar finalmente los archivos
-/**
-Si
 
-(una opcion podria ser hacerlo con PHP? ( ͡° ͜ʖ ͡°) )
-**/	
-    
+
+
+
+
+
+
+
+
 END;
 $$ language plpgsql;
+
+
 
 -- 1.e) Trigger de SP
     /** 
@@ -162,13 +172,13 @@ END;
 $$ language plpgsql;
 
     -- ahora si el trigger como tal
-CREATE TRIGGER arch_trgg
+CREATE OR REPLACE TRIGGER arch_trgg
 AFTER UPDATE ON "Atencion"
 FOR EACH ROW 
 EXECUTE FUNCTION inter_trgg();
 
 -- 1.f) Vista "Ficha"
-CREATE VIEW Ficha AS
+CREATE OR REPLACE VIEW Ficha AS
 SELECT 
     a."IDPaciente" as ID_paciente,
     a."fecha" as fecha,
