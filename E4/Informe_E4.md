@@ -10,13 +10,14 @@
 Cómo rescatas los datos de la base para desplegarlo en los formularios hy viceversa-->
 
 ### 2. Referencias a documentación externa válida
-https://www.youtube.com/watch?v=IZHBMwGIAoI "Sitio WEB con php y mysql"  
-https://www.geeksforgeeks.org/plsql/how-to-insert-a-line-break-in-a-string-plsql/ Uso de CHR(10) para insertar un salto de linea. Usado en la creacion de Recetas y ordenes.  
-https://www.postgresql.org/docs/current/plpgsql-statements.html - https://www.postgresql.org/docs/16/adminpack.html Escribir/generar/crear los archivos para las recetas/ordenes/bonos.  
-https://www.todopostgresql.com/postgresql-create-trigger-disparador-postgresql/ Usado para crear Trigger
-https://www.php.net/manual/es/function.pg-query.php Para evitar SQL_injection.  
-https://developer.mozilla.org/es/docs/Web/HTML/Reference/Elements/input elementos de HTML como input, label, textarea.  
-https://www.w3schools.com/php/php_sessions.asp Variables globales yeyy
+- https://www.youtube.com/watch?v=IZHBMwGIAoI "Sitio WEB con php y mysql"  
+- https://www.geeksforgeeks.org/plsql/how-to-insert-a-line-break-in-a-string-plsql/ Uso de CHR(10) para insertar un salto de linea. Usado en la creacion de Recetas y ordenes.  
+- https://www.postgresql.org/docs/current/plpgsql-statements.html - https://www.postgresql.org/docs/16/adminpack.html Escribir/generar/crear los archivos para las recetas/ordenes/bonos.  
+- https://www.todopostgresql.com/postgresql-create-trigger-disparador-postgresql/ Usado para crear Trigger
+- https://www.php.net/manual/es/function.pg-query.php Para evitar SQL_injection.  
+- https://developer.mozilla.org/es/docs/Web/HTML/Reference/Elements/input elementos de HTML como input, label, textarea.  
+- https://www.w3schools.com/php/php_sessions.asp Variables globales yeyy
+- https://www.w3schools.com/tags/tag_table.asp Usado en el Agendamiento de Hora del menu admin al momento de mostrar la informacion del paciente.
 
 ### 3. Instrucciones de ejecución de Entrega
 <!-- Indica las instrucciones para ejecutar la aplicación web adicionales al URL -->
