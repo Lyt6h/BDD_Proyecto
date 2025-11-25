@@ -9,6 +9,10 @@ $medicos_encontrados = [];
 $busqueda_activa = false;
 $especialidades_lista = [];
 
+$id_medico_seleccionado = null;
+$datos_medico_seleccionado = null;
+$fecha_seleccionada = null;
+
 //buscar todas las especialidades de los medicos
 $sql_especialidades = 'SELECT DISTINCT "especialidad" 
     FROM "Profecion_especialidad" 
@@ -18,8 +22,7 @@ $stmt_esp = $db->query($sql_especialidades);
 $especialidades_lista = $stmt_esp->fetchAll(PDO::FETCH_COLUMN);
 
 
-
-// logica de Obtener datos del paciente
+// logica de obtener datos del paciente
 if (isset($_POST['run']) && !empty($_POST['run'])) {
     $run_ingresado = trim($_POST['run']);
         
@@ -47,8 +50,6 @@ if (isset($_POST['run']) && !empty($_POST['run'])) {
 }
 
 
-
-
 // logica de obtener medico en caso de que se encontrara persona(paciente)
 if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) || isset($_POST['id_especialidad_seleccionada']))) {
     
@@ -59,7 +60,6 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
     if (!empty($nombre_buscado) || !empty($especialidad_seleccionada)) {
         $busqueda_activa = true;
 
-            
         // Construcción dinámica de la cláusula WHERE
         $where_clauses = [];
         $params = [];
@@ -80,18 +80,13 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
                 m."ID", m."Nombres", m."Apellidos", m."RUN",
                 pe."profesion", 
                 pe."especialidad"
-            FROM
-                "Persona" AS m
-            JOIN 
-                "Profecion_especialidad" AS pe ON m."ID" = pe."ID"
-            WHERE 
-                m.medico = TRUE
-                ' . (count($where_clauses) > 0 ? " AND (" . implode(" OR ", $where_clauses) . ")" : "") . '            ORDER BY 
-                m."Apellidos"';
+            FROM"Persona" AS m
+            JOIN "Profecion_especialidad" AS pe ON m."ID" = pe."ID"
+            WHERE m."medico" = TRUE' . (count($where_clauses) > 0 ? " AND (" . implode(" OR ", $where_clauses) . ")" : "") . '
+            ORDER BY m."Apellidos"';
         
         $stmt_medicos = $db->prepare($sql_medicos);
         
-        // Bind de los parámetros
         foreach ($params as $key => $value) {
             $stmt_medicos->bindValue($key, $value);
         }
@@ -105,10 +100,9 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
 
 
 
-
-
-
-<?php //interfaz  ?>
+<?php 
+    // interfaz  
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -155,11 +149,11 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
         <form method="POST" action="agendar_hora.php">
             <input type="hidden" name="run" value="<?php echo htmlspecialchars($datos_persona['RUN']); ?>">
 
-            <label for="nombre_buscado">Buscar por Nombre o Apellido:</label>
-            <input type="text" id="nombre_buscado" name="nombre_buscado">
+            <label for="nombre_buscado">Buscar por Nombre o Apellido (con inicial mayúscula y tildes):</label>
+            <input type="text" id="nombre_buscado" name="nombre_buscado"><br>
             
             <label for="especialidad_seleccionada">Seleccionar Especialidad:</label>
-            <select id="id_especialidad_seleccionada" name="id_especialidad_seleccionada">
+            <select id="id_especialidad_seleccionada" name="id_especialidad_seleccionada"><br>
                 <option value="todos">-- Seleccione una Especialidad (Opcional) --</option>
                 <?php foreach ($especialidades_lista as $especialidad): ?>
                     <option value="<?php echo htmlspecialchars($especialidad); ?>">
@@ -172,10 +166,10 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
                 <p class="error"><?php echo $mensaje_esp; ?></p>
             <?php endif; ?>
             
-            <button type="submit">Buscar Médico</button>
+            <br><button type="submit">Buscar Médico</button>
         </form>
 
-        <hr>
+        <hr>  <!-- linea bonita pt 2-->
 
         <?php if ($busqueda_activa): ?>
             <?php if (count($medicos_encontrados) > 0): ?>
@@ -184,6 +178,7 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
                 <form method="POST" action="agendar_hora.php">
                     <input type="hidden" name="run" value="<?php echo htmlspecialchars($datos_persona['RUN']); ?>">
 
+                    <!-- tabla dinamica de resultados de  busqueda -->
                     <table class="data-table">
                         <tr>
                             <th>Seleccionar</th>
@@ -208,11 +203,10 @@ if (isset($datos_persona) && $datos_persona && (isset($_POST['nombre_buscado']) 
                 <p class="error">No se encontraron medicos</p>
             <?php endif; ?>
         <?php endif; ?>
-        
     <?php endif; ?>
         
     <a href="agendar_hora.php">Reiniciar Búsqueda</a>
-    <p><a href="../menu_administrativo.php">Volver al Menú de Acciones</a></p>
+    <p><a href="menu_administrativo.php">Volver al Menú de Acciones</a></p>
     <a href="../logout.php">CERRAR SESIÓN</a>
 </div>
 </body>

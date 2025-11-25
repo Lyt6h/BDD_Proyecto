@@ -627,15 +627,11 @@ BEGIN
 #
 #
 **/
-    -- Crear o generar finalmente los archivos
-        -- Receta normal
+
 
     
 END;
 $$ language plpgsql;
-
-select generar_archivos(1);
-
 
 -- 1.e) Trigger de SP
     /** 
@@ -645,7 +641,7 @@ select generar_archivos(1);
 CREATE OR REPLACE FUNCTION inter_trgg()
 RETURNS TRIGGER as $$
 BEGIN
-    IF NEW."Efectuada" = TRUE AND OLD."Efectuada" = FALSE THEN CALL generar_archivos(NEW."ID");
+    IF NEW."Efectuada" = TRUE AND OLD."Efectuada" = FALSE THEN PERFORM generar_archivos(NEW."ID");
     END IF;
     RETURN NEW;
 END;
@@ -672,4 +668,3 @@ ORDER BY a."fecha" DESC;
 
 -- 1.g) Validacion
     -- DAMN!
-
